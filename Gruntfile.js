@@ -41,8 +41,11 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
-        // Add list of files to lint here
-
+      target: {
+        files: {
+          'public/dist/styles.min.css': ['public/styles.css']
+        }
+      }
     },
 
     watch: {
@@ -104,7 +107,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', ['concat', 'eslint', 'uglify', 'test'
+  grunt.registerTask('deploy', ['concat', 'eslint', 'uglify', 'cssmin', 'test'
       // add your production server task here
   ]);
 
