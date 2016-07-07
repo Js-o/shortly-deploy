@@ -3,6 +3,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+
     },
 
     mochaTest: {
@@ -52,6 +53,7 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: 'git push live master'
       }
     },
   });
@@ -76,6 +78,8 @@ module.exports = function(grunt) {
   grunt.registerTask('test', [
     'mochaTest'
   ]);
+
+  grunt.registerTask('update', ['shell']);
 
   grunt.registerTask('build', [
   ]);
