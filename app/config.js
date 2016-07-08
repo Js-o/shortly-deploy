@@ -5,43 +5,46 @@ var Promise = require('bluebird');
 var Schema = mongoose.Schema;
 var crypto = require('crypto');
 
+var User, Link;
+
 mongoose.connect('mongodb://127.0.0.1/db');
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  exports.urlSchema = new Schema({
-    url: String,
-    baseUrl: String,
-    code: String,
-    title: String,
-    visits: {type: Number, default: 0},
-    timestamp: {type: Date, default: Date.now }
+urlSchema = new Schema({
+  url: String,
+  baseUrl: String,
+  code: String,
+  title: String,
+  visits: {type: Number, default: 0},
+  timestamp: {type: Date, default: Date.now }
+});
+
+urlSchema.methods.hashCode = function() {
+  var shasum = crypto.createHash('sha1');
+  shasum.update(this.url);
+  this.code = shasum.digest('hex').slice(0, 5);
+};
+
+userSchema = new Schema({
+  username: String,
+  password: String,
+  salt: String,
+  urls: [urlSchema]
+});
+
+userSchema.methods.hashPassword = function(password) {
+  this.salt = new Data().valueOf();
+  this.password = brcyt.hashSync(password, this.salt);
+};
+
+userSchema.methods.comparePassword = function(attemptedPassword, callback) {
+  bcrypt.compare(attemptedPassword, this.password, function(err, isMatch) {
+    callback(isMatch);
   });
+};
 
-  exports.urlSchema.methods.hashCode = function() {
-    var shasum = crypto.createHash('sha1');
-    shasum.update(this.url);
-    this.code = shasum.digest('hex').slice(0, 5);
-  };
+exports.User = mongoose.model('User', userSchema);
+exports.Link = mongoose.model('Link', urlSchema); 
 
-  exports.userSchema = new Schema({
-    username: String,
-    password: String,
-    salt: String,
-    urls: [urlSchema]
-  });
-
-  exports.userSchema.methods.hashPassword = function(password) {
-    this.salt = new Data().valueOf();
-    this.password = brcyt.hashSync(password, this.salt);
-  };
-
-  exports.userSchema.methods.comparePassword = function(attemptedPassword, callback) {
-    bcrypt.compare(attemptedPassword, this.password, function(err, isMatch) {
-      callback(isMatch);
-    });
-  };
 
 
   // Kitten.find({'key': 'val'}, function (err, kittens) {
@@ -93,4 +96,3 @@ db.once('open', function() {
   // });
 
 // module.exports = db;
-});

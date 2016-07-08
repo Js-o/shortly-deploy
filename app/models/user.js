@@ -3,7 +3,7 @@ var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 var mongoose = require('mongoose');
 
-var User = mongoose.model('User', db.userSchema);
+// var User = mongoose.model('User', db.userSchema);
 
 // var UserBS = db.Model.extend({
 //   tableName: 'users',
@@ -25,4 +25,4 @@ var User = mongoose.model('User', db.userSchema);
 //   }
 // });
 
-module.exports = User;
+// module.exports = User;
